@@ -45,7 +45,14 @@
 ### Allowed
 - Upgrade/improve original texts
 - Use images from ethnosumba.sk (with approval)
-- Creative freedom on layout and sections
+- **Creative Session — 30.3.2026**:
+    - Finalized the "Vintage Emerald" vs "Bohemian Premium" color schemes.
+    - Decided on a gold-to-yellow-light flow for About/Journey/Products sections.
+    - Implemented high-end organic SVG shape dividers for section transitions.
+    - Refined the "Cesta je súčasť výrobku" section into a centered checkpoint journey with map-pin icons and dotted connectors.
+    - Fixed image clipping issues by ensuring images sit above shape dividers.
+    - Combined Newsletter and Etsy CTA into a high-contrast Mustard yellow module.
+    - Added `samsalogo.png` as the site favicon.
 
 ---
 

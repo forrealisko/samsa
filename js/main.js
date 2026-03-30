@@ -1,12 +1,11 @@
 /* ============================================
    SAMSA V2 — Main JavaScript
-   Vanilla JS: no dependencies
+   Vintage Emerald • Premium Interactions
    ============================================ */
 
 (function () {
   'use strict';
 
-  // ─── DOM Ready ───
   document.addEventListener('DOMContentLoaded', init);
 
   function init() {
@@ -16,31 +15,30 @@
     setupMobileNav();
     setupActiveNav();
     setupHeroSlider();
+    setupNavbarScroll();
+    setupParallax();
+    setupFormFeedback();
   }
 
   // ═══════════════════════════════════════
   // SMOOTH SCROLL
   // ═══════════════════════════════════════
   function setupSmoothScroll() {
-    const links = document.querySelectorAll('a[href^="#"]');
-    links.forEach(function (link) {
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
       link.addEventListener('click', function (e) {
-        const targetId = this.getAttribute('href');
+        var targetId = this.getAttribute('href');
         if (targetId === '#') return;
 
-        const target = document.querySelector(targetId);
+        var target = document.querySelector(targetId);
         if (!target) return;
 
         e.preventDefault();
-
-        // Close mobile drawer if open
         closeMobileNav();
 
-        // Get navbar height for offset
-        const navbar = document.getElementById('navbar');
-        const offset = navbar ? navbar.offsetHeight : 0;
+        var navbar = document.getElementById('navbar');
+        var offset = navbar ? navbar.offsetHeight : 0;
+        var targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
 
-        const targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
         window.scrollTo({
           top: targetPosition,
           behavior: 'smooth'
@@ -50,12 +48,10 @@
   }
 
   // ═══════════════════════════════════════
-  // SCROLL REVEAL (IntersectionObserver)
+  // SCROLL REVEAL — IntersectionObserver
   // ═══════════════════════════════════════
   function setupScrollReveal() {
-    // Check for reduced motion preference
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      // Make everything visible immediately
       document.querySelectorAll('.reveal').forEach(function (el) {
         el.classList.add('is-visible');
       });
@@ -67,18 +63,88 @@
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target); // Only animate once
+            observer.unobserve(entry.target);
           }
         });
       },
       {
-        threshold: 0.15,
-        rootMargin: '0px 0px -40px 0px'
+        threshold: 0.12,
+        rootMargin: '0px 0px -50px 0px'
       }
     );
 
     document.querySelectorAll('.reveal').forEach(function (el) {
       observer.observe(el);
+    });
+  }
+
+  // ═══════════════════════════════════════
+  // NAVBAR — scroll shadow + auto-hide
+  // ═══════════════════════════════════════
+  function setupNavbarScroll() {
+    var navbar = document.getElementById('navbar');
+    if (!navbar) return;
+
+    var lastScroll = 0;
+    var ticking = false;
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          var currentScroll = window.scrollY;
+
+          if (currentScroll > 20) {
+            navbar.classList.add('scrolled');
+          } else {
+            navbar.classList.remove('scrolled');
+          }
+
+          if (currentScroll > lastScroll && currentScroll > 400) {
+            navbar.style.transform = 'translateY(-100%)';
+          } else {
+            navbar.style.transform = 'translateY(0)';
+          }
+
+          lastScroll = currentScroll;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+
+  // ═══════════════════════════════════════
+  // PARALLAX — subtle depth on images
+  // ═══════════════════════════════════════
+  function setupParallax() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var parallaxElements = document.querySelectorAll('.about-image img, .about-fullwidth-image img, .store-image img');
+    if (!parallaxElements.length) return;
+
+    parallaxElements.forEach(function (el) {
+      el.classList.add('parallax-img');
+    });
+
+    var ticking = false;
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(function () {
+          parallaxElements.forEach(function (el) {
+            var rect = el.getBoundingClientRect();
+            var windowHeight = window.innerHeight;
+
+            if (rect.top < windowHeight && rect.bottom > 0) {
+              var scrollPercent = (rect.top - windowHeight) / (rect.height + windowHeight);
+              var translateY = scrollPercent * 30;
+              el.style.transform = 'translateY(' + translateY + 'px) scale(1.02)';
+            }
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
     });
   }
 
@@ -89,7 +155,7 @@
     var langToggles = document.querySelectorAll('.lang-toggle');
     if (!langToggles.length) return;
 
-    var currentLang = 'sk'; // Default
+    var currentLang = 'sk';
 
     var translations = {
       en: {
@@ -98,10 +164,12 @@
         'nav.products': 'Products',
         'nav.store': 'Store',
         'nav.contact': 'Contact',
-        'newsletter.title': 'Subscribe to our newsletter',
-        'newsletter.discount': 'Sign up and get an instant 10% DISCOUNT!',
+        'newsletter.title': 'Get 10% off your Etsy purchase',
+        'newsletter.discount': 'Sign up for our newsletter and we will send you a discount code immediately.',
         'newsletter.name': 'Name',
         'newsletter.submit': 'Submit',
+        'newsletter.etsyPrompt': 'Or head straight to our shop:',
+        'newsletter.etsyButton': 'Visit our Etsy Shop',
         'products.label': 'Assortment',
         'products.title': 'Little Boho World',
         'products.desc': 'Choose from our diverse selection of handmade products from around the world.',
@@ -112,7 +180,22 @@
         'products.cat5': 'Scarves',
         'products.cat6': 'Home Decor',
         'products.cat7': 'Incense',
-        'products.cat8': 'Gifts'
+        'products.cat8': 'Gifts',
+        'store.title': 'Our Store',
+        'store.addressLabel': 'Address',
+        'store.phoneLabel': 'Phone',
+        'store.hoursLabel': 'Opening hours',
+        'store.hoursValue': 'Monday - Sunday: 10:00 - 18:30',
+        'store.notice': 'For personal pickups call 0904 348 345 on workdays. We are in the courtyard. Thank you.',
+        'reviews.label': 'Reviews',
+        'reviews.title': 'What our customers say',
+        'contact.label': 'Contact',
+        'contact.title': 'Where to find us',
+        'contact.formTitle': 'Contact Form',
+        'contact.name': 'Name',
+        'contact.message': 'Your message',
+        'contact.submit': 'Send',
+        'contact.partners': 'Partners'
       },
       sk: {
         'nav.home': 'Úvod',
@@ -120,10 +203,12 @@
         'nav.products': 'Produkty',
         'nav.store': 'Predajňa',
         'nav.contact': 'Kontakt',
-        'newsletter.title': 'Prihláste sa na odoberanie newslettra',
-        'newsletter.discount': 'Zaregistruj sa a získaj okamžitú 10% ZĽAVU!',
+        'newsletter.title': 'Získajte 10% zľavu na nákup cez Etsy',
+        'newsletter.discount': 'Zaregistrujte sa k odberu newslettra a okamžite Vám pošleme zľavový kód.',
         'newsletter.name': 'Meno',
         'newsletter.submit': 'Odoslať',
+        'newsletter.etsyPrompt': 'Alebo zamierte rovno do obchodu:',
+        'newsletter.etsyButton': 'Navštívte náš Etsy obchod',
         'products.label': 'Sortiment',
         'products.title': 'Malý svet Boho',
         'products.desc': 'Vyberte si z našej pestrej ponuky ručne vyrobených výrobkov z celého sveta.',
@@ -134,12 +219,26 @@
         'products.cat5': 'Šály & Šatky',
         'products.cat6': 'Dekorácie',
         'products.cat7': 'Vónne Tyčinky',
-        'products.cat8': 'Darčeky'
+        'products.cat8': 'Darčeky',
+        'store.title': 'Naša predajňa',
+        'store.addressLabel': 'Adresa',
+        'store.phoneLabel': 'Telefón',
+        'store.hoursLabel': 'Otváracie hodiny',
+        'store.hoursValue': 'Pondelok – Nedeľa: 10:00 – 18:30',
+        'store.notice': 'Pre osobné odbery volajte v pracovné dni 0904 348 345. Sme vo dvore. Ďakujeme.',
+        'reviews.label': 'Hodnotenia',
+        'reviews.title': 'Čo hovoria naši zákazníci',
+        'contact.label': 'Kontakt',
+        'contact.title': 'Kde nás nájdete',
+        'contact.formTitle': 'Kontaktný formulár',
+        'contact.name': 'Meno',
+        'contact.message': 'Vaša správa',
+        'contact.submit': 'Odoslať',
+        'contact.partners': 'Partneri'
       }
     };
 
     function updateLanguage() {
-      // Update text content
       document.querySelectorAll('[data-i18n]').forEach(function (el) {
         var key = el.getAttribute('data-i18n');
         if (translations[currentLang][key]) {
@@ -147,7 +246,6 @@
         }
       });
 
-      // Update placeholders
       document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
         var key = el.getAttribute('data-i18n-placeholder');
         if (translations[currentLang][key]) {
@@ -155,7 +253,6 @@
         }
       });
 
-      // Update button text to show the OTHER language
       langToggles.forEach(function(btn) {
          btn.textContent = currentLang === 'sk' ? 'EN' : 'SK';
       });
@@ -168,9 +265,6 @@
         updateLanguage();
       });
     });
-
-    // Initialize (we start in SK, so we don't really need to run it, but good for safety)
-    // updateLanguage(); 
   }
 
   // ═══════════════════════════════════════
@@ -188,15 +282,13 @@
     hamburger.addEventListener('click', toggleMobileNav);
     overlay.addEventListener('click', closeMobileNav);
 
-    // Close when tapping a drawer link
     drawer.querySelectorAll('a').forEach(function (link) {
       link.addEventListener('click', closeMobileNav);
     });
   }
 
   function toggleMobileNav() {
-    var isOpen = drawer.classList.contains('open');
-    if (isOpen) {
+    if (drawer.classList.contains('open')) {
       closeMobileNav();
     } else {
       openMobileNav();
@@ -253,7 +345,7 @@
   }
 
   // ═══════════════════════════════════════
-  // HERO IMAGE SLIDER (cinematic Ken Burns)
+  // HERO SLIDER — Cinematic Ken Burns
   // ═══════════════════════════════════════
   function setupHeroSlider() {
     var slider = document.getElementById('heroSlider');
@@ -266,33 +358,58 @@
     var total = images.length;
     var panClasses = ['pan-down', 'pan-up'];
 
-    // Start first pan after 1s (human feel — page settles first)
     setTimeout(function () {
       images[0].classList.add(panClasses[0]);
     }, 1000);
 
-    // First transition after 9s (1s delay + 8s pan)
-    // Then cycle every 8.5s
     setTimeout(function () {
       transition();
       setInterval(transition, 8500);
     }, 9000);
 
     function transition() {
-      // Remove pan + fade out current image
       images[current].classList.remove(panClasses[current % panClasses.length]);
       images[current].classList.remove('active');
 
-      // Advance to next
       current = (current + 1) % total;
 
-      // Fade in + start pan simultaneously
-      // Pan class added with active — image is still at opacity 0,
-      // so the position jump to animation start is invisible.
-      // By the time opacity reaches ~0.3, pan is already smooth.
       images[current].classList.add('active');
       images[current].classList.add(panClasses[current % panClasses.length]);
     }
+  }
+
+  // ═══════════════════════════════════════
+  // FORM FEEDBACK — visual submit response
+  // ═══════════════════════════════════════
+  function setupFormFeedback() {
+    var contactForm = document.getElementById('contactForm');
+    var newsletterForm = document.getElementById('newsletterForm');
+
+    function handleSubmit(form) {
+      if (!form) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var btn = form.querySelector('.btn');
+        var originalText = btn.textContent;
+
+        btn.textContent = '✓';
+        btn.style.background = '#5A9184';
+        btn.style.color = '#fff';
+        btn.style.pointerEvents = 'none';
+
+        setTimeout(function () {
+          btn.textContent = originalText;
+          btn.style.background = '';
+          btn.style.color = '';
+          btn.style.pointerEvents = '';
+          form.reset();
+        }, 2500);
+      });
+    }
+
+    handleSubmit(contactForm);
+    handleSubmit(newsletterForm);
   }
 
 })();
