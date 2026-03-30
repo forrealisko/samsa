@@ -1,0 +1,5 @@
+.DS_Store
+images/NAWEB/
+node_modules/
+.vscode/
+.idea/
