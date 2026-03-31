@@ -71,7 +71,7 @@
   ── */
   --section-about:    var(--old-turquoise);
   --section-journey:  var(--blue-bayou);
-  --section-products: var(--bg-canvas);
+  --section-products: var(--bg-alt);
   --section-store:    var(--bg-light);
   --section-reviews:  var(--charcoal);
   --section-contact:  var(--bg-alt);
@@ -1304,26 +1304,36 @@ body::after {
 }
 
 .store-notice {
-  padding: 16px 20px;
-  border-radius: 10px;
+  padding: 18px 24px;
+  border-radius: 12px;
   font-size: 14px;
-  margin-top: 24px;
+  line-height: 1.6;
+  margin-top: 32px;
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px dashed var(--metallic-gold);
+  color: var(--text);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(4px);
+}
+
+.store-notice strong {
+  color: var(--dark-forest);
+  font-weight: 700;
 }
 
 /* Phone highlight */
 .phone-highlight {
-  color: var(--metallic-gold) !important;
+  color: var(--dark-forest) !important;
   font-size: 20px;
   font-weight: 700;
   text-decoration: none;
   letter-spacing: 0.03em;
-  transition: color 200ms ease, text-shadow 200ms ease;
+  transition: color 200ms ease;
   opacity: 1 !important;
 }
 
 .phone-highlight:hover {
-  color: var(--gold-light) !important;
-  text-shadow: 0 0 8px rgba(209, 177, 54, 0.3);
+  color: var(--old-turquoise) !important;
   opacity: 1 !important;
 }
 
@@ -1787,11 +1797,17 @@ body::after {
   .product-card { border-radius: 10px; }
 
   .product-card img {
-    height: 180px;
+    height: 100%;
+  }
+
+  .product-card-overlay {
+    opacity: 1;
+    background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
   }
 
   .product-card-overlay span {
-    font-size: clamp(22px, 5vw, 28px);
+    transform: translateY(0);
+    font-size: clamp(20px, 4.5vw, 26px);
   }
 
   /* Store — stack */
@@ -1909,11 +1925,11 @@ body::after {
 
   /* Products */
   .product-card img {
-    height: 140px;
+    height: 100%;
   }
 
   .product-card-overlay span {
-    font-size: clamp(18px, 5vw, 24px);
+    font-size: clamp(16px, 5vw, 22px);
   }
 
   /* Reviews */
