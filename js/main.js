@@ -114,41 +114,6 @@
   }
 
   // ═══════════════════════════════════════
-  // PARALLAX — subtle depth on images
-  // ═══════════════════════════════════════
-  function setupParallax() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    var parallaxElements = document.querySelectorAll('.about-image img, .about-fullwidth-image img, .store-image img');
-    if (!parallaxElements.length) return;
-
-    parallaxElements.forEach(function (el) {
-      el.classList.add('parallax-img');
-    });
-
-    var ticking = false;
-
-    window.addEventListener('scroll', function () {
-      if (!ticking) {
-        window.requestAnimationFrame(function () {
-          parallaxElements.forEach(function (el) {
-            var rect = el.getBoundingClientRect();
-            var windowHeight = window.innerHeight;
-
-            if (rect.top < windowHeight && rect.bottom > 0) {
-              var scrollPercent = (rect.top - windowHeight) / (rect.height + windowHeight);
-              var translateY = scrollPercent * 30;
-              el.style.transform = 'translateY(' + translateY + 'px) scale(1.02)';
-            }
-          });
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
-  }
-
-  // ═══════════════════════════════════════
   // LANGUAGE SWITCHER
   // ═══════════════════════════════════════
   function setupLanguageSwitcher() {

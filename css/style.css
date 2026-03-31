@@ -973,7 +973,7 @@ body::after {
 
 .journey-step {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 14px;
   padding: 12px 20px;
   text-align: left;
@@ -1004,14 +1004,16 @@ body::after {
   flex-shrink: 0;
   width: 10px;
   height: 10px;
-  background: var(--metallic-gold);
+  margin-top: 6px;
+  background: var(--old-turquoise);
   border-radius: 50%;
-  box-shadow: 0 0 6px rgba(209, 177, 54, 0.35);
+  box-shadow: 0 0 6px rgba(90, 145, 132, 0.4);
+  transition: transform 300ms var(--ease-spring), box-shadow 300ms ease;
 }
 
 .journey-step:hover .step-dot {
   transform: scale(1.3);
-  box-shadow: 0 0 10px rgba(209, 177, 54, 0.5);
+  box-shadow: 0 0 10px rgba(90, 145, 132, 0.6);
 }
 
 .journey-step p {
@@ -1306,6 +1308,23 @@ body::after {
   border-radius: 10px;
   font-size: 14px;
   margin-top: 24px;
+}
+
+/* Phone highlight */
+.phone-highlight {
+  color: var(--metallic-gold) !important;
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: color 200ms ease, text-shadow 200ms ease;
+  opacity: 1 !important;
+}
+
+.phone-highlight:hover {
+  color: var(--gold-light) !important;
+  text-shadow: 0 0 8px rgba(209, 177, 54, 0.3);
+  opacity: 1 !important;
 }
 
 /* ============================================
@@ -1654,6 +1673,12 @@ body::after {
     --v-sub: 48px;
   }
 
+  .hero { min-height: 500px; }
+
+  h1 { font-size: clamp(40px, 8vw, 60px); }
+  h2 { font-size: clamp(32px, 6vw, 48px); }
+  h3 { font-size: clamp(24px, 4vw, 36px); }
+
   .products-grid { grid-template-columns: repeat(3, 1fr); }
 
   .reviews-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1663,6 +1688,9 @@ body::after {
     max-width: 500px;
     justify-self: center;
   }
+
+  .store-row { gap: 40px; }
+  .contact-grid { gap: 40px; }
 }
 
 /* ============================================
@@ -1675,9 +1703,47 @@ body::after {
     --v-sub: 36px;
   }
 
+  /* Prevent horizontal overflow */
+  html, body {
+    overflow-x: hidden;
+  }
+
   .navbar-links { display: none; }
   .hamburger { display: flex; }
 
+  /* Hero — taller on mobile, center image */
+  .hero {
+    min-height: 85vh;
+    min-height: 85dvh;
+  }
+
+  .hero-slider img {
+    object-position: 25% center;
+    animation: none !important;
+  }
+
+  .hero-content p {
+    font-size: clamp(14px, 3.5vw, 17px);
+    max-width: 90%;
+  }
+
+  .hero-content .btn {
+    padding: 14px 36px;
+    font-size: 13px;
+  }
+
+  .scroll-indicator { bottom: 20px; }
+
+  /* Shape divider — smaller on mobile */
+  .shape-divider svg {
+    height: 40px;
+  }
+
+  .about {
+    padding-bottom: calc(var(--v-margin) + 40px);
+  }
+
+  /* About — stack */
   .about-row {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -1685,11 +1751,64 @@ body::after {
 
   .about-row.reverse { direction: ltr; }
 
+  .about-text h2 { font-size: clamp(32px, 8vw, 44px); }
+
+  /* Journey steps — allow wrapping on mobile */
+  .journey-steps {
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .journey-step {
+    padding: 10px 16px;
+  }
+
+  .journey-step p {
+    white-space: normal;
+    font-size: 14px;
+  }
+
+  .journey-closing {
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  /* Fullwidth image */
+  .about-fullwidth-image img {
+    height: 260px;
+  }
+
+  /* Products grid */
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
 
+  .product-card { border-radius: 10px; }
+
+  .product-card img {
+    height: 180px;
+  }
+
+  .product-card-overlay span {
+    font-size: clamp(22px, 5vw, 28px);
+  }
+
+  /* Store — stack */
+  .store-row {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .store-image { border-radius: 10px; }
+
+  .store-info h3 { font-size: clamp(28px, 7vw, 36px); }
+
+  .phone-highlight {
+    font-size: 18px;
+  }
+
+  /* Reviews — single column */
   .reviews-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -1698,39 +1817,120 @@ body::after {
   .reviews-grid .review-card:last-child { max-width: 100%; }
   .review-card { padding: 24px; }
 
-  .etsy-cta { padding: 28px 20px; }
-
-  .store-row {
-    grid-template-columns: 1fr;
-    gap: 32px;
+  /* Newsletter — stack form */
+  .newsletter-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
 
+  .newsletter-form input[type="text"],
+  .newsletter-form input[type="email"] {
+    min-width: 100%;
+  }
+
+  .etsy-cta { padding: 28px 20px; }
+
+  /* Contact — stack */
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 32px;
   }
 
+  .contact-map iframe {
+    height: 280px;
+  }
+
   .contact-form { grid-template-columns: 1fr; }
 
+  /* Footer */
   .footer-nav { gap: 16px; }
+
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .footer-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Partners */
+  .partners-logos { gap: 28px; }
+  .partners-logos a { width: 90px; }
 }
 
 /* ============================================
    RESPONSIVE — SMALL MOBILE (≤ 480px)
    ============================================ */
 @media (max-width: 480px) {
+  :root {
+    --h-padding: 16px;
+    --v-margin: 48px;
+    --v-sub: 28px;
+  }
+
   .navbar-brand img { width: 36px; }
   .brand-name { font-size: 28px; }
   .brand-sub { font-size: 11px; }
 
-  .newsletter-form {
-    flex-direction: column;
-    align-items: stretch;
+  .hero-content h1 {
+    font-size: clamp(28px, 9vw, 40px);
   }
 
-  .newsletter-form input[type="text"],
-  .newsletter-form input[type="email"] { min-width: 100%; }
+  .hero-content .subtitle {
+    font-size: clamp(20px, 6vw, 30px);
+  }
 
-  .partners-logos { gap: 24px; }
-  .partners-logos a { width: 80px; }
+  .hero-content p {
+    font-size: 14px;
+  }
+
+  .hero-content .btn {
+    padding: 12px 28px;
+    font-size: 12px;
+  }
+
+  /* About bullets */
+  .about-text .bullet {
+    font-size: clamp(22px, 6vw, 30px);
+  }
+
+  /* Journey steps */
+  .journey-step p {
+    font-size: 13px;
+  }
+
+  .step-connector {
+    height: 16px;
+  }
+
+  /* Products */
+  .product-card img {
+    height: 140px;
+  }
+
+  .product-card-overlay span {
+    font-size: clamp(18px, 5vw, 24px);
+  }
+
+  /* Reviews */
+  .review-card { padding: 20px; }
+  .review-text { font-size: 14px; }
+
+  /* Store phone */
+  .phone-highlight {
+    font-size: 17px;
+  }
+
+  /* Contact */
+  .contact-map iframe {
+    height: 220px;
+  }
+
+  /* Partners */
+  .partners-logos { gap: 20px; }
+  .partners-logos a { width: 70px; }
 }
