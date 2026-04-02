@@ -97,6 +97,10 @@
   --card-overlay:  rgba(70, 105, 122, 0.75);
   --divider-fill:  var(--section-journey);
 
+
+  /* ── THEME OVERRIDES (A/B Testing) ── */
+  /* Default is emerald/vintage. The teal theme uses the brand's bright #14AFA5 */
+  
   /* ── Typography ── */
   --font-display: 'AmaticSC', cursive;
   --font-accent: 'TrashHand', cursive;
@@ -127,6 +131,27 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+/* ============================================
+   THEME: TEAL (A/B TESTING)
+   ============================================ */
+[data-theme="teal"] {
+  --old-turquoise: #14AFA5;
+}
+
+[data-theme="teal"] .section--gold {
+  color: var(--text);
+}
+
+[data-theme="teal"] .section--gold h2,
+[data-theme="teal"] .section--gold h3,
+[data-theme="teal"] .section--gold .meta-label {
+  color: var(--text) !important;
+}
+
+[data-theme="teal"] .section--gold p {
+  color: var(--text-dim) !important;
 }
 
 html {
@@ -705,21 +730,18 @@ body::after {
 
 .hero-slider img.active { opacity: 1; }
 
-.hero-slider img.pan-down {
-  animation: pan-down 8s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+.hero-slider img {
+  animation: pan-continuous 24s ease-in-out infinite;
 }
 
-.hero-slider img.pan-up {
-  animation: pan-up 8s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+.hero-slider img:nth-child(even) {
+  animation-direction: reverse;
+  animation-duration: 28s;
 }
 
-@keyframes pan-down {
+@keyframes pan-continuous {
   0% { object-position: 50% 20%; }
-  100% { object-position: 50% 38%; }
-}
-
-@keyframes pan-up {
-  0% { object-position: 50% 38%; }
+  50% { object-position: 50% 38%; }
   100% { object-position: 50% 20%; }
 }
 
