@@ -9,43 +9,19 @@
   document.addEventListener('DOMContentLoaded', init);
 
   function init() {
-    setupSmoothScroll();
     setupScrollReveal();
     setupLanguageSwitcher();
     setupMobileNav();
     setupActiveNav();
     setupHeroSlider();
     setupNavbarScroll();
-    setupParallax();
     setupFormFeedback();
   }
 
   // ═══════════════════════════════════════
   // SMOOTH SCROLL
   // ═══════════════════════════════════════
-  function setupSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-      link.addEventListener('click', function (e) {
-        var targetId = this.getAttribute('href');
-        if (targetId === '#') return;
 
-        var target = document.querySelector(targetId);
-        if (!target) return;
-
-        e.preventDefault();
-        closeMobileNav();
-
-        var navbar = document.getElementById('navbar');
-        var offset = navbar ? navbar.offsetHeight : 0;
-        var targetPosition = target.getBoundingClientRect().top + window.scrollY - offset;
-
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
-      });
-    });
-  }
 
   // ═══════════════════════════════════════
   // SCROLL REVEAL — IntersectionObserver
