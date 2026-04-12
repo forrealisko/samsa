@@ -446,17 +446,18 @@ body::after {
   width: 100%;
   left: 0;
   line-height: 0;
-  overflow: hidden;
   z-index: 5;
 }
 
-.shape-divider--bottom { bottom: 0; }
+.shape-divider--bottom { 
+  bottom: -2px; 
+}
 
 .shape-divider svg {
   display: block;
-  width: 100%;
-  height: 80px;
-  margin-bottom: -1px;
+  width: calc(100% + 2px);
+  height: 82px;
+  transform: translateX(-1px);
 }
 
 .shape-divider--gold-to-yellow path {
