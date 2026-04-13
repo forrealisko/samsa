@@ -37,7 +37,11 @@ $date    = date('j.m.Y H:i:s');
 if (!file_exists($logFile)) {
     $header = "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
             . "<tr><th>Dátum a čas</th><th>Meno</th><th>Email</th><th>IP</th></tr>\n";
-    @file_put_contents($logFile, $header);
+    if (file_put_contents($logFile, $header) === false) {
+        http_response_code(500);
+        echo json_encode(['ok' => false, 'error' => 'Nepodarilo sa vytvoriť súbor. Skontrolujte práva priečinka php/']);
+        exit;
+    }
 }
 
 $row = "<tr>"
@@ -47,11 +51,11 @@ $row = "<tr>"
      . "<td>" . htmlspecialchars($ip) . "</td>"
      . "</tr>\n";
 
-$logged = @file_put_contents($logFile, $row, FILE_APPEND | LOCK_EX);
+$logged = file_put_contents($logFile, $row, FILE_APPEND | LOCK_EX);
 
 if ($logged === false) {
     http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'Registrácia zlyhala. Skúste znova.']);
+    echo json_encode(['ok' => false, 'error' => 'Zápis do súboru zlyhal.']);
     exit;
 }
 
