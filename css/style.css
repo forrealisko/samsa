@@ -730,9 +730,9 @@ body::after {
 
 .hero-slider img.active { opacity: 1; }
 
-/* First image (two girls) — show more of the top to reveal faces */
+/* First image (two girls) — show the very top to reveal faces */
 .hero-slider img:first-child {
-  object-position: 50% 5%;
+  object-position: 50% 0%;
   animation: pan-hero1 24s ease-in-out infinite;
 }
 
@@ -742,9 +742,9 @@ body::after {
 }
 
 @keyframes pan-hero1 {
-  0% { object-position: 50% 5%; }
-  50% { object-position: 50% 12%; }
-  100% { object-position: 50% 5%; }
+  0% { object-position: 50% 0%; }
+  50% { object-position: 50% 8%; }
+  100% { object-position: 50% 0%; }
 }
 
 @keyframes pan-hero2 {
