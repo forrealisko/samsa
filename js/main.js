@@ -66,9 +66,32 @@ function setupHeroSlider(){
 }
 
 function setupFormFeedback(){
-  function handle(form){if(!form)return;form.addEventListener('submit',function(e){e.preventDefault();var btn=form.querySelector('.btn');var txt=btn.textContent;btn.textContent='✓';btn.style.background='#5A9184';btn.style.color='#fff';btn.style.pointerEvents='none';setTimeout(function(){btn.textContent=txt;btn.style.background='';btn.style.color='';btn.style.pointerEvents='';form.reset()},2500)})}
-  handle(document.getElementById('contactForm'));
-  handle(document.getElementById('newsletterForm'));
+  function handle(form,endpoint){
+    if(!form)return;
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var btn=form.querySelector('.btn');var txt=btn.textContent;
+      btn.textContent='…';btn.style.pointerEvents='none';
+      fetch(endpoint,{method:'POST',body:new FormData(form)})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d.ok){
+          btn.textContent='✓';btn.style.background='#5A9184';btn.style.color='#fff';
+          form.reset();
+        }else{
+          btn.textContent='✗';btn.style.background='#c0392b';btn.style.color='#fff';
+          if(d.errors)alert(d.errors.join('\n'));
+        }
+        setTimeout(function(){btn.textContent=txt;btn.style.background='';btn.style.color='';btn.style.pointerEvents=''},3000);
+      })
+      .catch(function(){
+        btn.textContent='✗';btn.style.background='#c0392b';btn.style.color='#fff';
+        setTimeout(function(){btn.textContent=txt;btn.style.background='';btn.style.color='';btn.style.pointerEvents=''},3000);
+      });
+    });
+  }
+  handle(document.getElementById('contactForm'),'php/contact.php');
+  handle(document.getElementById('newsletterForm'),'php/newsletter.php');
 }
 
 function setupLightbox(){var lb=document.getElementById('lightbox'),lbImg=document.getElementById('lightboxImg'),lbCap=document.getElementById('lightboxCaption'),closeBtn=document.getElementById('lightboxClose'),prevBtn=document.getElementById('lightboxPrev'),nextBtn=document.getElementById('lightboxNext'),cards=document.querySelectorAll('.product-card');if(!lb||!cards.length)return;var ci=0,products=[];
